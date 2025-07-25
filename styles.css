@@ -1,0 +1,263 @@
+/* WhatsApp Helper 插件样式 */
+
+/* 悬浮球样式 - 小巧设计 */
+.whatsapp-helper-floating-ball {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 80px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    border-radius: 8px 0 0 8px;
+    box-shadow: -2px 0 15px rgba(37, 211, 102, 0.3);
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    user-select: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: none;
+}
+
+.whatsapp-helper-floating-ball:hover {
+    transform: translateY(-50%) translateX(-3px);
+    box-shadow: -3px 0 20px rgba(37, 211, 102, 0.4);
+    width: 38px;
+}
+
+.whatsapp-helper-floating-ball .ball-icon {
+    font-size: 18px;
+    color: white;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.whatsapp-helper-floating-ball .ball-status {
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 菜单样式 */
+.whatsapp-helper-menu {
+    position: fixed;
+    width: 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 10001;
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+.whatsapp-helper-menu .menu-header {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.whatsapp-helper-menu .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.whatsapp-helper-menu .close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.whatsapp-helper-menu .menu-content {
+    padding: 0;
+}
+
+.whatsapp-helper-menu .menu-section {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.whatsapp-helper-menu .menu-section:last-child {
+    border-bottom: none;
+}
+
+.whatsapp-helper-menu .menu-section-title {
+    padding: 12px 20px 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: #f8f9fa;
+}
+
+.whatsapp-helper-menu .menu-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f8f9fa;
+    color: #333 !important;
+}
+
+.whatsapp-helper-menu .menu-item:last-child {
+    border-bottom: none;
+}
+
+.whatsapp-helper-menu .menu-item:hover {
+    background-color: #f8f9fa;
+}
+
+.whatsapp-helper-menu .menu-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.whatsapp-helper-menu .menu-item span {
+    color: #333 !important;
+}
+
+.whatsapp-helper-menu .menu-item span:not(.menu-status) {
+    color: #333 !important;
+    font-weight: 500 !important;
+}
+
+.whatsapp-helper-menu .menu-item span:not(.menu-icon):not(.menu-status) {
+    color: #333 !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+}
+
+.whatsapp-helper-menu .menu-item span:last-child {
+    font-size: 14px;
+    color: #333 !important;
+}
+
+.whatsapp-helper-menu .menu-status {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+    color: #00a884 !important;
+    background: none !important;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #00a884;
+}
+
+/* 通知样式 */
+.whatsapp-helper-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+    z-index: 10002;
+    font-size: 14px;
+    font-weight: 500;
+    max-width: 300px;
+    word-wrap: break-word;
+    animation: notificationSlideIn 0.3s ease;
+}
+
+/* 翻译结果样式 */
+.whatsapp-translation-result {
+    color: #00e676 !important;
+    font-size: 1.3em !important;
+    font-weight: 500 !important;
+    margin-top: 8px !important;
+    padding: 6px 10px !important;
+    background-color: rgba(0, 230, 118, 0.1) !important;
+    border-radius: 8px !important;
+    border-left: 3px solid #00e676 !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* 输入翻译提示动画 */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translate(-50%, 10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translate(-50%, 0); 
+    }
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .whatsapp-helper-floating-ball {
+        width: 30px;
+        height: 70px;
+    }
+
+    .whatsapp-helper-floating-ball .ball-icon {
+        font-size: 16px;
+    }
+
+    .whatsapp-helper-floating-ball .ball-status {
+        font-size: 9px;
+    }
+
+    .whatsapp-helper-menu {
+        width: 260px;
+        right: 40px;
+    }
+
+    .whatsapp-helper-notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+} 

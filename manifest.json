@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsApp Helper",
+  "version": "1.0.0",
+  "description": "WhatsApp 助手插件 - 基础版本",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://web.whatsapp.com/*"],
+      "css": ["styles.css"],
+      "js": [
+        "modules/Detector.js",
+        "modules/MessageService.js",
+        "modules/TranslationService.js",
+        "modules/InputTranslator.js",
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["styles.css"],
+      "matches": ["*://web.whatsapp.com/*"]
+    }
+  ]
+} 
