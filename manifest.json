@@ -10,13 +10,14 @@
     {
       "matches": ["*://web.whatsapp.com/*"],
       "css": ["styles.css"],
-      "js": [
-        "modules/Detector.js",
-        "modules/MessageService.js",
-        "modules/TranslationService.js",
-        "modules/InputTranslator.js",
-        "content.js"
-      ],
+                        "js": [
+                    "modules/Detector.js",
+                    "modules/MessageService.js",
+                    "modules/TranslationService.js",
+                    "modules/InputTranslator.js",
+                    "modules/SelectionMode.js",
+                    "content.js"
+                  ],
       "run_at": "document_end"
     }
   ],

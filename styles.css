@@ -177,6 +177,40 @@
     border: 1px solid #00a884;
 }
 
+/* 二级菜单样式 */
+.whatsapp-helper-menu .menu-submenu {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 8px 0;
+}
+
+.whatsapp-helper-menu .submenu-item {
+    padding: 8px 20px !important;
+    font-size: 13px !important;
+    color: #666 !important;
+    border-bottom: none !important;
+    background-color: transparent !important;
+}
+
+.whatsapp-helper-menu .submenu-item:hover {
+    background-color: #e9ecef !important;
+    color: #333 !important;
+}
+
+.whatsapp-helper-menu .submenu-item .menu-icon {
+    font-size: 14px !important;
+    width: 18px !important;
+}
+
+.whatsapp-helper-menu .submenu-item span:not(.menu-icon) {
+    color: #666 !important;
+    font-weight: 400 !important;
+}
+
+.whatsapp-helper-menu .submenu-item:hover span:not(.menu-icon) {
+    color: #333 !important;
+}
+
 /* 通知样式 */
 .whatsapp-helper-notification {
     position: fixed;

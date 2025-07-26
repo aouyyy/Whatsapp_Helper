@@ -11,6 +11,7 @@ class WhatsAppHelper {
         this.messageService = null;
         this.translationService = null;
         this.inputTranslator = null;
+        this.selectionMode = null;
         this.translationEnabled = true; // 翻译功能开关状态
     }
 
@@ -44,7 +45,7 @@ class WhatsAppHelper {
     /**
      * 页面检测成功回调
      */
-    onPageDetected() {
+    async onPageDetected() {
         this.isInitialized = true;
         this.detector.setInitializedStatus(true);
         console.log('WhatsApp Helper 初始化成功');
@@ -55,7 +56,7 @@ class WhatsAppHelper {
         this.setupEventListeners();
         
         // 初始化消息和翻译服务
-        this.initServices();
+        await this.initServices();
         
         this.showNotification('WhatsApp Helper 已启动');
     }
@@ -63,7 +64,7 @@ class WhatsAppHelper {
     /**
      * 初始化消息和翻译服务
      */
-    initServices() {
+    async initServices() {
         console.log('初始化消息和翻译服务...');
         
         // 初始化消息服务
@@ -95,6 +96,10 @@ class WhatsAppHelper {
         // 初始化输入翻译服务
         this.inputTranslator = new InputTranslator();
         
+        // 初始化选择模式服务
+        this.selectionMode = new SelectionMode();
+        await this.selectionMode.init();
+        
         // 启动服务
         this.messageService.start();
         if (this.translationEnabled) {
@@ -102,7 +107,7 @@ class WhatsAppHelper {
         }
         this.inputTranslator.start();
         
-        console.log('消息、翻译和输入翻译服务初始化完成');
+        console.log('消息、翻译、输入翻译和选择模式服务初始化完成');
     }
 
     /**
@@ -167,6 +172,33 @@ class WhatsAppHelper {
                     <span>输入翻译</span>
                     <span class="menu-status" id="inputTranslationStatus">开启</span>
                 </div>
+                <div class="menu-item" data-action="toggleSelectionMode">
+                    <span class="menu-icon">📋</span>
+                    <span>选择模式</span>
+                    <span class="menu-status" id="selectionModeStatus">关闭</span>
+                </div>
+                <div class="menu-submenu" id="selectionSubmenu" style="display: none;">
+                    <div class="menu-item submenu-item" data-action="exportSelected">
+                        <span class="menu-icon">📤</span>
+                        <span>导出选中</span>
+                    </div>
+                    <div class="menu-item submenu-item" data-action="exportAllContacts">
+                        <span class="menu-icon">📦</span>
+                        <span>导出全部</span>
+                    </div>
+                    <div class="menu-item submenu-item" data-action="checkLocalStorage">
+                        <span class="menu-icon">🔍</span>
+                        <span>查询数据</span>
+                    </div>
+                    <div class="menu-item submenu-item" data-action="clearAllContacts">
+                        <span class="menu-icon">🗑️</span>
+                        <span>清空数据</span>
+                    </div>
+                    <div class="menu-item submenu-item" data-action="testImageDownload">
+                        <span class="menu-icon">🧪</span>
+                        <span>测试图片下载</span>
+                    </div>
+                </div>
             </div>
         `;
         
@@ -227,6 +259,7 @@ class WhatsAppHelper {
         this.isMenuVisible = true;
         this.updateTranslationStatus(); // 更新翻译状态显示
         this.updateInputTranslationStatus(); // 更新输入翻译状态显示
+        this.updateSelectionModeStatus(); // 更新选择模式状态显示
         console.log('菜单已显示');
     }
 
@@ -247,7 +280,13 @@ class WhatsAppHelper {
         
         const actions = {
             toggleTranslation: () => this.toggleTranslation(),
-            toggleInputTranslation: () => this.toggleInputTranslation()
+            toggleInputTranslation: () => this.toggleInputTranslation(),
+            toggleSelectionMode: () => this.toggleSelectionMode(),
+            exportSelected: () => this.exportSelected(),
+            exportAllContacts: () => this.exportAllContacts(),
+            checkLocalStorage: () => this.checkLocalStorage(),
+            clearAllContacts: () => this.clearAllContacts(),
+            testImageDownload: () => this.testImageDownload()
         };
 
         if (actions[action]) {
@@ -324,16 +363,130 @@ class WhatsAppHelper {
     }
 
     /**
+     * 切换选择模式
+     */
+    async toggleSelectionMode() {
+        if (!this.selectionMode) {
+            this.showNotification('选择模式服务未初始化');
+            return;
+        }
+
+        const isEnabled = await this.selectionMode.toggleSelectMode();
+        
+        if (isEnabled) {
+            this.showNotification('选择模式已开启');
+            // 显示二级菜单
+            this.showSelectionSubmenu();
+        } else {
+            this.showNotification('选择模式已关闭');
+            // 隐藏二级菜单
+            this.hideSelectionSubmenu();
+        }
+        
+        this.updateSelectionModeStatus();
+    }
+
+    /**
+     * 更新选择模式状态显示
+     */
+    updateSelectionModeStatus() {
+        const statusElement = this.menu.querySelector('#selectionModeStatus');
+        if (statusElement && this.selectionMode) {
+            const isEnabled = this.selectionMode.selectMode;
+            statusElement.textContent = isEnabled ? '开启' : '关闭';
+            statusElement.style.color = isEnabled ? '#00a884' : '#999';
+            statusElement.style.borderColor = isEnabled ? '#00a884' : '#999';
+        }
+    }
+
+    /**
+     * 显示选择模式二级菜单
+     */
+    showSelectionSubmenu() {
+        const submenu = this.menu.querySelector('#selectionSubmenu');
+        if (submenu) {
+            submenu.style.display = 'block';
+        }
+    }
+
+    /**
+     * 隐藏选择模式二级菜单
+     */
+    hideSelectionSubmenu() {
+        const submenu = this.menu.querySelector('#selectionSubmenu');
+        if (submenu) {
+            submenu.style.display = 'none';
+        }
+    }
+
+    /**
+     * 导出选中消息
+     */
+    exportSelected() {
+        if (!this.selectionMode) {
+            this.showNotification('选择模式服务未初始化');
+            return;
+        }
+        this.selectionMode.exportSelected();
+    }
+
+    /**
+     * 导出所有联系人消息
+     */
+    async exportAllContacts() {
+        if (!this.selectionMode) {
+            this.showNotification('选择模式服务未初始化');
+            return;
+        }
+        await this.selectionMode.exportAllContacts();
+    }
+
+    /**
+     * 查询本地存储数据
+     */
+    async checkLocalStorage() {
+        if (!this.selectionMode) {
+            this.showNotification('选择模式服务未初始化');
+            return;
+        }
+        await this.selectionMode.checkLocalStorage();
+    }
+
+    /**
+     * 清空所有联系人消息
+     */
+    async clearAllContacts() {
+        if (!this.selectionMode) {
+            this.showNotification('选择模式服务未初始化');
+            return;
+        }
+        await this.selectionMode.clearAllContacts();
+    }
+
+    /**
+     * 测试图片下载功能
+     */
+    async testImageDownload() {
+        if (!this.selectionMode) {
+            this.showNotification('选择模式服务未初始化');
+            return;
+        }
+        await this.selectionMode.testImageDownload();
+    }
+
+    /**
      * 显示状态
      */
     showStatus() {
         const pageState = this.detector.getPageState();
         const inputTranslationStatus = this.inputTranslator ? this.inputTranslator.getStatus() : null;
+        const selectionModeStatus = this.selectionMode ? this.selectionMode.getStatus() : null;
         
         const status = {
             initialized: this.isInitialized,
             translationEnabled: this.translationEnabled,
             inputTranslationEnabled: inputTranslationStatus?.isEnabled,
+            selectionModeEnabled: selectionModeStatus?.selectMode,
             pageState: pageState,
             timestamp: new Date().toLocaleString()
         };
@@ -343,6 +496,9 @@ class WhatsAppHelper {
         let statusText = `消息翻译: ${this.translationEnabled ? '开启' : '关闭'}`;
         if (inputTranslationStatus) {
             statusText += `, 输入翻译: ${inputTranslationStatus.isEnabled ? '开启' : '关闭'}`;
+        }
+        if (selectionModeStatus) {
+            statusText += `, 选择模式: ${selectionModeStatus.selectMode ? '开启' : '关闭'}`;
         }
         
         this.showNotification(statusText);
@@ -356,6 +512,7 @@ class WhatsAppHelper {
         console.log('插件实例:', this);
         console.log('消息翻译状态:', this.translationEnabled);
         console.log('输入翻译状态:', this.inputTranslator?.getStatus());
+        console.log('选择模式状态:', this.selectionMode?.getStatus());
         console.log('页面状态:', this.detector.getPageState());
         console.log('页面URL:', window.location.href);
         
